@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OPR Keyboard Shortcut
-// @version      0.1
+// @version      0.2
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Add keyboard shortcut support to OPR
 // @match        *://opr.ingress.com/recon
@@ -9,26 +9,33 @@
 // ==/UserScript==
 
 (function() {
-	var keymap = [
-		['1', '2', '3', '4', '5'],
-		['q', 'w', 'e', 'r', 't'],
-		['a', 's' ,'d', 'f', 'g'],
-		['z', 'x' ,'c', 'v', 'b'],
-		['6', '7' ,'8', '9', '0'],
-		['y', 'u' ,'i', 'o', 'p']
-	];
+	var items = ['Total', 'Title', 'Significance', 'Uniqueness', 'Location', 'Accessibility'];
+	var current = 0;
+	var updateItem = function () {
+		$('#current_item').html(items[current]);
+	};
+	$('.navbar-collapse').append('<h4 style="float:left;">Now grading: <span id="current_item"></span></h4>');
+	updateItem();
     $('body').on('keydown', function (e) {
 		if (e.keyCode == 13 && e.ctrlKey) {
 			$('.big-submit-button').click();
 			return;
 		}
-		for (var i in keymap) {
-			for (var j in keymap[i]) {
-				if (keymap[i][j] == e.key) {
-					$('.btn-group').eq(i).find('button').eq(j).click();
-					return;
-				}
-			}
+		if (e.key >= '1' && e.key <= '5') {
+			$('.btn-group').eq(current).find('button').eq(e.key - '1').click();
+			current = (current + 1) % items.length;
+			updateItem();
+			return;
+		}
+		if (e.key == '.') {
+			current = (current + 1) % items.length;
+			updateItem();
+			return;
+		}
+		if (e.key == ',') {
+			current = (current - 1) % items.length;
+			updateItem();
+			return;
 		}
 	});
 })();
