@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IITC: Export missions to IngressMM (by DeepAQ)
 // @namespace    http://smartintel.imaq.cn/
-// @version      1.2
+// @version      1.3
 // @description  Export missions in view to IngressMM
 // @author       DeepAQ
 // @include        https://*.ingress.com/intel*
@@ -57,9 +57,14 @@ unsafeWindow.exportMissions.processPortals = function () {
     if (portals.length > 0) {
         var po = portals[0];
         portals = portals.slice(1);
-        exportMissions.log('>> Processing portal: ' + po.options.data.title + ' (' + portals.length + ' left)');
+		if (po.options) {
+			exportMissions.log('>> Processing portal: ' + po.options.data.title + ' (' + portals.length + ' left)');
+			po = po.options.guid;
+		} else {
+			exportMissions.log('>> Processing portal: ' + po + ' (' + portals.length + ' left)');
+		}
         unsafeWindow.postAjax('getTopMissionsForPortal', {
-            guid: po.options.guid,
+            guid: po,
         }, function (data) {
             if (data.result) {
                 missions = data.result;
@@ -74,8 +79,8 @@ unsafeWindow.exportMissions.processPortals = function () {
     }
 };
 
-unsafeWindow.exportMissions.start = function () {
-    dialog({
+unsafeWindow.exportMissions.showDialog = function () {
+	dialog({
         html: '<div id="missions_export_result" style="height: 400px; overflow-y: scroll;">',
         title: 'AQMH Mission Exporter',
         width: '500px',
@@ -86,6 +91,12 @@ unsafeWindow.exportMissions.start = function () {
             $(this).dialog('close');
         },
     });
+};
+
+unsafeWindow.exportMissions.start = function () {
+    portals = [];
+	missions = [];
+	exportMissions.showDialog();
     var bounds = unsafeWindow.map.getBounds();
     for (var guid in unsafeWindow.portals) {
         var po = unsafeWindow.portals[guid];
@@ -104,8 +115,16 @@ unsafeWindow.exportMissions.start = function () {
     exportMissions.processPortals();
 };
 
+unsafeWindow.exportMissions.startFromPrompt = function () {
+	var input = prompt('Enter portal GUIDs, splitted by comma(,) :');
+	portals = input.split(',');
+	missions = [];
+	exportMissions.showDialog();
+	exportMissions.processPortals();
+};
+
 var setup = function () {
-    $('#toolbox').append('<a onclick="window.exportMissions.start();">Export missions</a>');
+    $('#toolbox').append('<strong>Export missions from:</strong><a onclick="window.exportMissions.start();">View</a><a onclick="window.exportMissions.startFromPrompt();">GUIDs</a>');
 };
 
 setTimeout(setup, 1000);
