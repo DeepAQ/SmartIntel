@@ -4,7 +4,6 @@
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Show EXIF info of photos in OPR
 // @match        *://opr.ingress.com/recon
-// @grant        GM_XML
 // @require      https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js
 // @require      https://cdn.bootcss.com/exif-js/2.3.0/exif.min.js
 // ==/UserScript==
@@ -29,7 +28,7 @@
         };
     };
 
-	var tryGetImgUrl = function () {
+    var tryGetImgUrl = function () {
         var url = $('.center-cropped-img').attr('src');
         if (!url) {
             setTimeout(tryGetImgUrl, 1000);
