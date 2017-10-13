@@ -12,7 +12,7 @@
 	var items = ['Total', 'Title', 'Significance', 'Uniqueness', 'Location', 'Accessibility'];
 	var current = 0;
 	var updateItem = function () {
-		$('#current_item').html(items[current]);
+        $('#current_item').html(items[current]);
 	};
 	$('.navbar-collapse').append('<h4 style="float:left;">Now grading: <span id="current_item"></span></h4>');
 	updateItem();
@@ -22,7 +22,8 @@
 			return;
 		}
 		if (e.key >= '1' && e.key <= '5') {
-			$('.btn-group').eq(current).find('button').eq(e.key - '1').click();
+            var newPos = current < 4 ? current : current + 3;
+			$('.btn-group').eq(newPos).find('button').eq(e.key - '1').click();
 			current = (current + 1) % items.length;
 			updateItem();
 			return;
