@@ -17,11 +17,16 @@
         img.onload = function () {
             EXIF.getData(img, function () {
                 var tags = EXIF.getAllTags(this);
-                var info = '<strong>[EXIF]</strong><br>';
+                var info = '';
                 for (var key in tagsToShow) {
                     if (tags[tagsToShow[key]]) {
-                        info += '<strong>' + tagsToShow[key] + ': </strong>' + tags[tagsToShow[key]] + '<br>';
+                        info += tagsToShow[key] + ': ' + tags[tagsToShow[key]] + '<br />';
                     }
+                }
+                if (info !== '') {
+                    info = '<small class="gold">EXIF</small><br>' + info;
+                } else {
+                    info = '<small class="gold">EXIF</small><br />no data available';
                 }
                 $('#descriptionDiv').append('<div>' + info + '</div>');
             });
