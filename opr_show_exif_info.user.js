@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OPR Show EXIF Info
-// @version      0.1
+// @version      0.2
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Show EXIF info of photos in OPR
 // @match        *://opr.ingress.com/recon
@@ -27,19 +27,23 @@ function dms_to_deg(dms)
         img.onload = function () {
             EXIF.getData(img, function () {
                 var tags = EXIF.getAllTags(this);
-                var info = '<strong>[EXIF]</strong><br>';
+                var info = '';
                 for (var key in tagsToShow) {
                     if (tags[tagsToShow[key]]) {
-                        info += '<strong>' + tagsToShow[key] + ': </strong>' + tags[tagsToShow[key]] + '<br>';
+                        info += tagsToShow[key] + ': ' + tags[tagsToShow[key]] + '<br />';
                     }
+                }
+                if (info !== '') {
+                    info = '<small class="gold">[EXIF]</small><br>' + info;
+                } else {
+                    info = '<small class="gold">[EXIF]</small><br />No EXIF data present';
                 }
                 if (tags['GPSLatitude'] && tags['GPSLongitude'])
                 {
                     var deglat = dms_to_deg(tags['GPSLatitude']);
                     var deglon = dms_to_deg(tags['GPSLongitude']);
-                    info += '<div class="btn-group"><a class="button btn btn-default" target="osm" href="https://www.openstreetmap.org/?mlat=' + deglat + '&amp;mlon=' + deglon + '&amp;zoom=16">OSM</a></div>';
+                    info += '<div class="btn-group"><a class="button btn btn-default" target="osm" href="https://www.openstreetmap.org/?mlat=' + deglat + '&amp;mlon=' + deglon + '&amp;zoom=15">Open in OSM</a></div>';
                 }
-
                 $('#descriptionDiv').append('<div>' + info + '</div>');
             });
         };
