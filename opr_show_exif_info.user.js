@@ -8,6 +8,16 @@
 // @require      https://cdn.bootcss.com/exif-js/2.3.0/exif.min.js
 // ==/UserScript==
 
+function dms_to_deg(dms)
+{
+    var d = dms[0];
+    var m = dms[1];
+    var s = dms[2];
+
+    var deg = d/1 + m/60 + s/3600;
+    return deg;
+}
+
 (function() {
     var tagsToShow = ['DateTime', 'Make', 'Model', 'Software', 'GPSLatitude', 'GPSLongitude'];
 
@@ -23,6 +33,13 @@
                         info += '<strong>' + tagsToShow[key] + ': </strong>' + tags[tagsToShow[key]] + '<br>';
                     }
                 }
+                if (tags['GPSLatitude'] && tags['GPSLongitude'])
+                {
+                    var deglat = dms_to_deg(tags['GPSLatitude']);
+                    var deglon = dms_to_deg(tags['GPSLongitude']);
+                    info += '<div class="btn-group"><a class="button btn btn-default" target="osm" href="https://www.openstreetmap.org/?mlat=' + deglat + '&amp;mlon=' + deglon + '&amp;zoom=16">OSM</a></div>';
+                }
+
                 $('#descriptionDiv').append('<div>' + info + '</div>');
             });
         };
