@@ -18,6 +18,16 @@
         return Math.round((d / 1 + m / 60 + s / 3600) * 1E6) / 1E6;
     };
 
+    var distance = function (lat1, lng1, lat2, lng2) {
+        var dx = Math.abs(lng1 - lng2);
+        var dy = Math.abs(lat1 - lat2);
+        var b = (lat1 + lat2) / 2.0;
+        var lx = (dx / 180.0 * Math.PI) * 6367000.0 * Math.cos(b / 180.0 * Math.PI);
+        var ly = 6367000.0 * dy / 180.0 * Math.PI;
+        // var l = Math.sqrt(lx * lx + ly * ly);
+        return (lat1 < lat2 ? '↑' : '↓') + Math.ceil(lx) + 'm ' + (lng1 < lng2 ? '→' : '←') + Math.ceil(ly) + 'm';
+    };
+
     var getExif = function (url) {
         var img = document.createElement('img');
         img.src = url;
@@ -42,6 +52,10 @@
                 if (tags['GPSLatitude'] && tags['GPSLongitude']) {
                     var deglat = dms_to_deg(tags['GPSLatitude']);
                     var deglon = dms_to_deg(tags['GPSLongitude']);
+                    var portalPos = /@([^,]+),([^,]+)$/.exec(document.getElementById('descriptionDiv').getElementsByTagName('a')[1].getAttribute('href'));
+                    var portalLat = Number(portalPos[1]);
+                    var portalLng = Number(portalPos[2]);
+                    info += 'Distance (portal -> photo): ' + distance(portalLat, portalLng, deglat, deglon) + '<br />';
                     info += '<div class="btn-group"><a class="button btn btn-default" target="osm" href="https://www.openstreetmap.org/?mlat=' + deglat + '&amp;mlon=' + deglon + '&amp;zoom=15">Open in OSM</a></div>';
                 }
                 $('#descriptionDiv').append('<div>' + info + '</div>');
