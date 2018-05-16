@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OPR Show EXIF Info
-// @version      0.3
+// @version      0.4
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Show EXIF info of photos in OPR
 // @match        *://opr.ingress.com/recon
