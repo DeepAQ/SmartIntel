@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OPR Show EXIF Info
-// @version      0.4
+// @version      0.4.1
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Show EXIF info of photos in OPR
 // @match        *://opr.ingress.com/recon
@@ -25,7 +25,7 @@
         var lx = (dx / 180.0 * Math.PI) * 6367000.0 * Math.cos(b / 180.0 * Math.PI);
         var ly = 6367000.0 * dy / 180.0 * Math.PI;
         // var l = Math.sqrt(lx * lx + ly * ly);
-        return (lat1 < lat2 ? '↑' : '↓') + Math.ceil(lx) + 'm ' + (lng1 < lng2 ? '→' : '←') + Math.ceil(ly) + 'm';
+        return (lat1 < lat2 ? '⇑' : '⇓') + Math.ceil(lx) + 'm ' + (lng1 < lng2 ? '⇒' : '⇐') + Math.ceil(ly) + 'm';
     };
 
     var getExif = function (url) {
