@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OPR Show EXIF Info
-// @version      0.4.1
+// @version      0.4.2
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Show EXIF info of photos in OPR
 // @match        *://opr.ingress.com/recon
@@ -34,12 +34,15 @@
         img.onload = function () {
             EXIF.getData(img, function () {
                 var tags = EXIF.getAllTags(this);
+                console.log(tags);
                 var info = '';
                 for (var key in tagsToShow) {
                     if (tags[tagsToShow[key]]) {
                         info += tagsToShow[key] + ': ' + tags[tagsToShow[key]];
                         if (tagsToShow[key] == 'GPSLatitude' || tagsToShow[key] == 'GPSLongitude') {
-                            info += ' (' + dms_to_deg(tags[tagsToShow[key]]) + ')';
+                            var ref = tags[tagsToShow[key] + 'Ref'];
+                            var negative = (ref == 'S' || ref == 'W');
+                            info += ref + ' (' + (negative ? -1 : 1) * dms_to_deg(tags[tagsToShow[key]]) + ')';
                         }
                         info += '<br />';
                     }
@@ -50,8 +53,8 @@
                     info = '<small class="gold">[EXIF]</small><br />No EXIF data present';
                 }
                 if (tags['GPSLatitude'] && tags['GPSLongitude']) {
-                    var deglat = dms_to_deg(tags['GPSLatitude']);
-                    var deglon = dms_to_deg(tags['GPSLongitude']);
+                    var deglat = (tags['GPSLatitudeRef'] == 'S' ? -1 : 1) * dms_to_deg(tags['GPSLatitude']);
+                    var deglon = (tags['GPSLongitudeRef'] == 'W' ? -1 : 1) * dms_to_deg(tags['GPSLongitude']);
                     var portalPos = /@([^,]+),([^,]+)$/.exec(document.getElementById('descriptionDiv').getElementsByTagName('a')[1].getAttribute('href'));
                     var portalLat = Number(portalPos[1]);
                     var portalLng = Number(portalPos[2]);
