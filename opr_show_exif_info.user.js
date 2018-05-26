@@ -55,7 +55,7 @@
                 if (tags['GPSLatitude'] && tags['GPSLongitude']) {
                     var deglat = (tags['GPSLatitudeRef'] == 'S' ? -1 : 1) * dms_to_deg(tags['GPSLatitude']);
                     var deglon = (tags['GPSLongitudeRef'] == 'W' ? -1 : 1) * dms_to_deg(tags['GPSLongitude']);
-                    var portalPos = /@([^,]+),([^,]+)$/.exec(document.getElementById('descriptionDiv').getElementsByTagName('a')[1].getAttribute('href'));
+                    var portalPos = /@([^,]+),([^,]+)$/.exec(document.evaluate("//*[@ng-bind='subCtrl.pageData.streetAddress']/parent::a").iterateNext().search);
                     var portalLat = Number(portalPos[1]);
                     var portalLng = Number(portalPos[2]);
                     info += 'Distance (portal -> photo): ' + distance(portalLat, portalLng, deglat, deglon) + '<br />';
