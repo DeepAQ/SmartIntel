@@ -4,7 +4,6 @@
 // @namespace    https://github.com/DeepAQ/SmartIntel
 // @description  Add keyboard shortcut support to OPR
 // @match        *://opr.ingress.com/recon
-// @grant        none
 // @require      https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js
 // ==/UserScript==
 
