@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         OPR Show EXIF Info
-// @version      0.5
+// @name         Wayfarer Show EXIF Info
+// @version      0.6
 // @namespace    https://github.com/DeepAQ/SmartIntel
-// @description  Show EXIF info of photos in OPR
-// @match        *://opr.ingress.com/recon
+// @description  Show EXIF info of photos , if available, in Wayfarer
+// @match        *://wayfarer.nianticlabs.com/review
 // @require      https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js
 // @require      https://github.com/mattiasw/ExifReader/releases/download/2.7.0/exif-reader.js
 // ==/UserScript==
